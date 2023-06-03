@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  labels:
+    app: alfred
+  name: alfred
+
+spec:
+  selector:
+    matchLabels:
+      app: alfred
+
+  template:
+    metadata:
+      labels:
+        app: alfred
+
+    spec:
+      containers:
+        - image: ghcr.io/quaternionmedia/al-admin:main
+          imagePullPolicy: Always
+          name: alfred
+          envFrom:
+            - configMapRef:
+                name: admin-config
+            - secretRef:
+                name: admin-secret
