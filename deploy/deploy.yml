@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  labels:
+    app: alfred
+  name: alfred
+
+spec:
+  selector:
+    matchLabels:
+      app: alfred
+
+  template:
+    metadata:
+      labels:
+        app: alfred
+
+    spec:
+      containers:
+        - image: ghcr.io/quaternionmedia/alfred:main
+          imagePullPolicy: Always
+          name: alfred
+          command:
+            [
+              'gunicorn',
+              'alfred:app',
+              '-b',
+              '0.0.0.0:8000',
+              '-w',
+              '4',
+              '--worker-class',
+              'uvicorn.workers.UvicornWorker',
+            ]
+          envFrom:
+            - configMapRef:
+                name: al-config
+            - secretRef:
+                name: al-secret
