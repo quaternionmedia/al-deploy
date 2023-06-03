@@ -3,24 +3,24 @@ kind: Deployment
 
 metadata:
   labels:
-    app: alfred
-  name: alfred
+    app: admin
+  name: admin
 
 spec:
   selector:
     matchLabels:
-      app: alfred
+      app: admin
 
   template:
     metadata:
       labels:
-        app: alfred
+        app: admin
 
     spec:
       containers:
         - image: ghcr.io/quaternionmedia/al-admin:main
           imagePullPolicy: Always
-          name: alfred
+          name: admin
           envFrom:
             - configMapRef:
                 name: admin-config
