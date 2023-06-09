@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  labels:
+    app: mongo
+  name: mongo
+
+spec:
+  selector:
+    matchLabels:
+      app: mongo
+
+  template:
+    metadata:
+      labels:
+        app: mongo
+
+    spec:
+      containers:
+        - image: mongo:latest
+          imagePullPolicy: Always
+          name: mongo
+          envFrom:
+            - secretRef:
+                name: db-secret
+          resources:
+            limits:
+              cpu: '1000m'
+              memory: '2Gi'
+            requests:
+              cpu: '100m'
+              memory: '100Mi'
