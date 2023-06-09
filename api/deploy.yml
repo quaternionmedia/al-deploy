@@ -45,5 +45,6 @@ spec:
           persistentVolumeClaim:
             claimName: al-site
         - name: dist
-          persistentVolumeClaim:
-            claimName: al-dist
+          hostPath:
+            path: /tmp/dist
+            type: ''
