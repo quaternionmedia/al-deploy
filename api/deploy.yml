@@ -26,6 +26,8 @@ spec:
           volumeMounts:
             - mountPath: '/app/site'
               name: site
+            - mountPath: '/app/dist'
+              name: dist
           envFrom:
             - configMapRef:
                 name: api-config
@@ -42,3 +44,6 @@ spec:
         - name: site
           persistentVolumeClaim:
             claimName: al-site
+        - name: dist
+          persistentVolumeClaim:
+            claimName: al-dist
