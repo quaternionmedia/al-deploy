@@ -3,60 +3,49 @@ kind: Deployment
 
 metadata:
   labels:
-    app: alfred
-  name: alfred
+    app: render
+  name: render
 
 spec:
   selector:
     matchLabels:
-      app: alfred
+      app: render
 
   template:
     metadata:
       labels:
-        app: alfred
+        app: render
 
     spec:
       containers:
         - image: ghcr.io/quaternionmedia/alfred:pr-113
           imagePullPolicy: Always
           name: alfred
-          command:
-            ['uvicorn', 'alfred.main:app', '--host', '0.0.0.0', '--port', '8000']
+          command: ['/bin/sh', '-c']
+          args: ['fc-cache -f -v && mkdir -p alfred/data && mkdir -p alfred/videos && celery -A alfred.core.utils:renderer --workdir alfred/ worker --concurrency=1']
           volumeMounts:
-            - mountPath: /app/dist
-              name: site
             - mountPath: /root/.fonts/
               name: fonts
-            - mountPath: /cred
+            - mountPath: /cred/
               name: credentials
           envFrom:
             - configMapRef:
                 name: api-config
             - secretRef:
                 name: api-secret
+            - secretRef:
+                name: render-secret
           resources:
             limits:
-              cpu: 1000m
-              memory: 2Gi
+              cpu: 4000m
+              memory: 4Gi
             requests:
               cpu: 100m
               memory: 100Mi
-      initContainers:
-        - name: web
-          image: ghcr.io/quaternionmedia/al-web:pr-1
-          imagePullPolicy: Always
-          volumeMounts:
-            - mountPath: /app/dist
-              name: site
       volumes:
-        - name: site
-          persistentVolumeClaim:
-            claimName: al-site
         - name: fonts
           persistentVolumeClaim:
             claimName: fonts
         - name: credentials
           persistentVolumeClaim:
             claimName: credentials
-
