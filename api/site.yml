@@ -3,9 +3,9 @@ kind: PersistentVolumeClaim
 metadata:
   name: al-site
 spec:
-  storageClassName: default
+  storageClassName: vultr-block-storage
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 20Mi
+      storage: 1Gi

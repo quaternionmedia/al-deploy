@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: alfred-ingressroute
+spec:
+  routes:
+    - kind: Rule
+      match: Host(`alfred.quaternion.media`)
+      services:
+        - kind: Service
+          name: alfred
+          port: 80
+  tls:
+    certResolver: production
+    domains:
+      - main: alfred.quaternion.media
